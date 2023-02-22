@@ -72,7 +72,8 @@ def patient_age(
     all of the operations above are performed N1 times.
     For big-O analysis,
     we drop the constant factor,
-    yielding O(N1) complexity."""
+    yielding O(N1) complexity.
+    """
     # patients = records[0]  # O(1)
     patients = records["patients"]  # O(1)
     for patient in patients:  # N1 times
@@ -106,7 +107,8 @@ def patient_is_sick(
     Since there are N2 labs,
     all of the operations above are performed N2 times.
     For big-O analysis, we drop the constant factor,
-    yielding O(N2) complexity."""
+    yielding O(N2) complexity.
+    """
     # labs = records[1]  # O(1)
     labs = records["labs"]  # O(1)
     for lab in labs:  # N2 times
