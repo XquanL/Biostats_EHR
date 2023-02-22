@@ -58,7 +58,9 @@ def parse_data(
     return all_information  # O(1)
 
 
-def patient_age(records: dict[str, list[dict[str, str]]], patient_id: str) -> int:
+def patient_age(
+    records: dict[str, list[dict[str, str]]], patient_id: str
+) -> int:
     """Take the data and return the age in years of the given patient.
 
     For every patient, we need to
@@ -133,4 +135,4 @@ if __name__ == "__main__":
             ">",
             4.0,
         )
-    )ß
+    )
