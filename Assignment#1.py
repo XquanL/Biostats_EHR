@@ -4,7 +4,7 @@ import datetime
 
 def parse_data(
     patient_filename: str, lab_filename: str
-) -> dict[str, list[dict[str, str]]]:
+) -> dict[str, dict[str, dict[str, str]]]:
     """Read and parse the data files and return a dictionary of patients.
 
     N1 is the number of patients
@@ -28,30 +28,31 @@ def parse_data(
     yielding O(N2*M2) complexity for the lab file.
     The total complexity is O(N1*M1 + N2*M2) = O(N1*M1) + O(N2*M2)
     """
-    with open(patient_filename, "r") as patient_file:  # 1 time
+    with open(
+        patient_filename, "r", encoding="utf-8-sig"
+    ) as patient_file:  # 1 time
         patient_data = patient_file.readlines()  # O(N1*M1)
         columns = patient_data[0].strip().split("\t")  # O(M1)
-        columns[0] = columns[0][1:]  # O(1)
-        # remove \ufeff from the first column
-        patients = []  # O(1)
+        patients = {}  # O(1)
         for patient in patient_data[1:]:  # N1 times
             patient_information = patient.strip().split("\t")  # O(M1)
             patient_dict = {}  # O(1)
             for j in range(len(columns)):  # M1 times
                 patient_dict[columns[j]] = patient_information[j]  # O(1)
-            patients.append(patient_dict)  # O(1)
-    with open(lab_filename, "r") as lab_file:  # 1 time
+            # set the patient ID as the key
+            patients[patient_dict["PatientID"]] = patient_dict  # O(1)
+    with open(lab_filename, "r", encoding="utf-8-sig") as lab_file:  # 1 time
         lab_data = lab_file.readlines()  # O(N2*M2)
         columns = lab_data[0].strip().split("\t")  # O(M2)
-        columns[0] = columns[0][1:]  # O(1)
-        # remove \ufeff from the first column
-        labs = []  # O(1)
+        labs = {}  # O(1)
         for lab in lab_data[1:]:  # N2 times
             lab_information = lab.strip().split("\t")  # O(M2)
             lab_dict = {}  # O(1)
             for j in range(len(columns)):  # M2 times
                 lab_dict[columns[j]] = lab_information[j]  # O(1)
-            labs.append(lab_dict)  # O(1)
+            # set patient ID + lab name as the key
+            IDnew = lab_dict["PatientID"] + lab_dict["LabName"]  # O(1)
+            labs[IDnew] = lab_dict  # O(1)
     # all_information = [patients, labs]  # O(1)
     # change the return type to dict
     all_information = {"patients": patients, "labs": labs}  # O(1)
@@ -59,38 +60,38 @@ def parse_data(
 
 
 def patient_age(
-    records: dict[str, list[dict[str, str]]], patient_id: str
+    records: dict[str, dict[str, dict[str, str]]], patient_id: str
 ) -> int:
     """Take the data and return the age in years of the given patient.
 
     For every patient, we need to
-    determine whether the patient ID matches the given patient ID,
+    determine whether the patient ID is in the patient dictionary,
     which is a O(1) operation,
-    and calculate the age of the patient,
+    and find the patient ID in the patient dictionary,
+    which is a O(1) operation,
+    and then find the date of birth,
     which is a O(1) operation.
-    Since there are N1 patients,
-    all of the operations above are performed N1 times.
+    Then, we need to calculate the age of the patient,
+    which is a O(1) operation.
+
     For big-O analysis,
-    we drop the constant factor,
-    yielding O(N1) complexity.
+    it yields O(1) complexity.
     """
     # patients = records[0]  # O(1)
     patients = records["patients"]  # O(1)
-    for patient in patients:  # N1 times
-        # print(patient)
-        if patient["PatientID"] == patient_id:  # O(1)
-            date_of_birth = patient["PatientDateOfBirth"]  # O(1)
-            birth = datetime.datetime.strptime(
-                str(date_of_birth), "%Y-%m-%d %H:%M:%S.%f"
-            )  # O(1)
-            # calculate the age in years
-            age_year = (datetime.datetime.today() - birth).days / 365  # O(1)
-            age_year_int = int(age_year)  # O(1)
-    return age_year_int  # O(1)
+    if patient_id in patients:  # O(1)
+        date_of_birth = patients[patient_id]["PatientDateOfBirth"]  # O(1)
+        birth = datetime.datetime.strptime(
+            str(date_of_birth), "%Y-%m-%d %H:%M:%S.%f"
+        )  # O(1)
+        # calculate the age in years
+        age_year = (datetime.datetime.today() - birth).days / 365  # O(1)
+        age_year_int = int(age_year)  # O(1)
+    return age_year_int  # O(1
 
 
 def patient_is_sick(
-    records: dict[str, list[dict[str, str]]],
+    records: dict[str, dict[str, dict[str, str]]],
     patient_id: str,
     lab_name: str,
     operator: str,
@@ -98,28 +99,28 @@ def patient_is_sick(
 ) -> bool:
     """Return a boolean indicating whether the patient is sick.
 
-    For every lab, we need to determine
-    whether the patient ID matches the given patient ID,
-    then whether the lab name matches the given lab name,
-    and then whether the patient has ever had a test
-    with value above (">") or below ("<") the given level.
-    They are all O(1) operations.
-    Since there are N2 labs,
-    all of the operations above are performed N2 times.
-    For big-O analysis, we drop the constant factor,
-    yielding O(N2) complexity.
+    For every lab, we need to
+    find the patient ID + lab name in the lab dictionary,
+    which is a O(1) operation,
+    and then find the lab value,
+    which is a O(1) operation.
+    Then, we need to compare the lab value with the given value,
+    which is a O(1) operation.
+
+    For big-O analysis,
+    it yields O(N2) complexity.
     """
     # labs = records[1]  # O(1)
     labs = records["labs"]  # O(1)
-    for lab in labs:  # N2 times
-        if lab["PatientID"] == patient_id:  # O(1)
-            if lab["LabName"] == lab_name:  # O(1)
-                if operator == ">":  # O(1)
-                    if float(lab["LabValue"]) > value:  # O(1)
-                        return True  # O(1)
-                elif operator == "<":  # O(1)
-                    if float(lab["LabValue"]) < value:  # O(1)
-                        return True  # O(1)
+    id_lab = patient_id + lab_name  # O(1)
+    if id_lab in labs:  # O(1)
+        lab = labs[id_lab]  # O(1)
+        if operator == ">":  # O(1)
+            if float(lab["LabValue"]) > value:  # O(1)
+                return True  # O(1)
+        elif operator == "<":  # O(1)
+            if float(lab["LabValue"]) < value:  # O(1)
+                return True  # O(1)
     return False  # O(1)
 
 
@@ -133,7 +134,7 @@ if __name__ == "__main__":
         patient_is_sick(
             records,
             "1A8791E3-A61C-455A-8DEE-763EB90C9B2C",
-            "METABOLIC: ALBUMIN",
+            "METABOLIC: GLUCOSE",
             ">",
             4.0,
         )
