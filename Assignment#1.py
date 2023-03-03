@@ -29,11 +29,13 @@ def parse_data(
     and each column is split once, which is a O(M2) operation.
     For every line in the lab file, every column(lab information)
     is split onece, which is a O(M2) operation.
+    And we need to make a dictionary of that particular lab outcome,
+    which is a O(M2) operation.
     Then, we need to determine whether the patient id that the lab
     information belongs to is in the labs dictionary or not,
     which is a O(1) operation.
-    Then, we need to make a dictionary of that particular lab outcome
-    and add that to a list of all lab outcome that patient has as the
+    Then, we use the patient id as the key
+    and make a list of all lab outcome that patient has as the
     value of the labs dictionary related to that patient,
     which is a O(M2) operation.
     There are N2 lab outcomes,
@@ -63,20 +65,13 @@ def parse_data(
         labs: dict[str, list[dict[str, str]]] = {}  # O(1)
         for lab in lab_data[1:]:  # N2 times
             lab_information = lab.strip().split("\t")  # O(M2)
-            if lab_information[0] in labs:  # O(1)
-                labs[lab_information[0]].append(
-                    {
-                        columns[i]: lab_information[i]
-                        for i in range(len(columns))
-                    }
-                )  # O(M2)
+            lab_map = {
+                columns[i]: lab_information[i] for i in range(len(columns))
+            }  # O(M2)
+            if lab_map["PatientID"] in labs:  # O(1)
+                labs[lab_map["PatientID"]].append(lab_map)  # O(1)
             else:
-                labs[lab_information[0]] = [
-                    {
-                        columns[i]: lab_information[i]
-                        for i in range(len(columns))
-                    }
-                ]  # O(M2)
+                labs[lab_map["PatientID"]] = [lab_map]  # O(1)
     # all_information = [patients, labs]  # O(1)
     # change the return type to tuple
     return patients, labs  # O(1)
