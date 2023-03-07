@@ -23,7 +23,7 @@ The `ehr_analysis` contains three functions.
   from ehr_analysis import parse_data
   
   def test_parse_data():
-    data_dict = ehr_analysis.parse_data("tests/Patient.txt", "tests/Labs.txt")
+    data_dict = ehr_analysis.parse_data("tests/test_patients.txt", "tests/test_labs.txt")
     assert data_dict[0]["FB2ABB23-C9D0-4D09-8464-49BF0B982F0F"] == {
         "PatientID": "FB2ABB23-C9D0-4D09-8464-49BF0B982F0F",
         "PatientGender": "Male",
@@ -54,12 +54,12 @@ The `ehr_analysis` contains three functions.
     from ehr_analysis import patient_age
   
     def test_patient_age() -> None:
-    data_dict = ehr_analysis.parse_data("tests/Patient.txt", "tests/Labs.txt")
+    data_dict = ehr_analysis.parse_data("tests/test_patients.txt", "tests/test_labs.txt")
     assert (
         ehr_analysis.patient_age(
-            data_dict, "1A8791E3-A61C-455A-8DEE-763EB90C9B2C"
+            data_dict, "DB22A4D9-7E4D-485C-916A-9CD1386507FB"
         )
-        == 49
+        == 52
     )
     ```
     
@@ -74,7 +74,7 @@ The `ehr_analysis` contains three functions.
     ```{python}
     from ehr_analysis import patient_is_sick
   
-    data_dict = ehr_analysis.parse_data("tests/Patient.txt", "tests/Labs.txt")
+    data_dict = ehr_analysis.parse_data("tests/test_patients.txt", "tests/test_labs.txt")
     assert (
         ehr_analysis.patient_is_sick(
             data_dict,
