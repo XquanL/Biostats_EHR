@@ -6,7 +6,9 @@ import ehr_analysis
 
 def test_parse_data_type() -> None:
     """Test the parse_data function returns the correct type."""
-    data_dict = ehr_analysis.parse_data("tests/Patient.txt", "tests/Labs.txt")
+    data_dict = ehr_analysis.parse_data(
+        "tests/test_patients.txt", "tests/test_labs.txt"
+    )
     assert isinstance(data_dict, tuple)
     assert isinstance(data_dict[0], dict)
     assert isinstance(data_dict[1], dict)
@@ -14,7 +16,9 @@ def test_parse_data_type() -> None:
 
 def test_parse_data() -> None:
     """Test the parse_data function construct the correct dictionary."""
-    data_dict = ehr_analysis.parse_data("tests/Patient.txt", "tests/Labs.txt")
+    data_dict = ehr_analysis.parse_data(
+        "tests/test_patients.txt", "tests/test_labs.txt"
+    )
     assert data_dict[0]["FB2ABB23-C9D0-4D09-8464-49BF0B982F0F"] == {
         "PatientID": "FB2ABB23-C9D0-4D09-8464-49BF0B982F0F",
         "PatientGender": "Male",
@@ -36,7 +40,9 @@ def test_parse_data() -> None:
 
 def test_patient_age() -> None:
     """test whether the patient_age function returns the correct age"""
-    data_dict = ehr_analysis.parse_data("tests/Patient.txt", "tests/Labs.txt")
+    data_dict = ehr_analysis.parse_data(
+        "tests/test_patients.txt", "tests/test_labs.txt"
+    )
     assert (
         ehr_analysis.patient_age(
             data_dict, "1A8791E3-A61C-455A-8DEE-763EB90C9B2C"
@@ -47,7 +53,9 @@ def test_patient_age() -> None:
 
 def test_patient_age_wrong() -> None:
     """test whether the patient_age function returns the correct age"""
-    data_dict = ehr_analysis.parse_data("tests/Patient.txt", "tests/Labs.txt")
+    data_dict = ehr_analysis.parse_data(
+        "tests/test_patients.txt", "tests/test_labs.txt"
+    )
     with pytest.raises(AssertionError) as e:
         assert (
             ehr_analysis.patient_age(
@@ -61,7 +69,9 @@ def test_patient_age_wrong() -> None:
 
 def test_patient_is_sick() -> None:
     """test whether the patient_is_sick function returns the correct boolean"""
-    data_dict = ehr_analysis.parse_data("tests/Patient.txt", "tests/Labs.txt")
+    data_dict = ehr_analysis.parse_data(
+        "tests/test_patients.txt", "tests/test_labs.txt"
+    )
     assert (
         ehr_analysis.patient_is_sick(
             data_dict,
@@ -88,7 +98,9 @@ def test_patient_is_sick() -> None:
 def test_patient_is_sick_exceptions() -> None:
     """test whether the patient_is_sick function
     raises the correct exceptions when input is invalid"""
-    data_dict = ehr_analysis.parse_data("tests/Patient.txt", "tests/Labs.txt")
+    data_dict = ehr_analysis.parse_data(
+        "tests/test_patients.txt", "tests/test_labs.txt"
+    )
     try:
         assert (
             ehr_analysis.patient_is_sick(
