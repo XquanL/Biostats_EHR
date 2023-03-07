@@ -45,9 +45,9 @@ def test_patient_age() -> None:
     )
     assert (
         ehr_analysis.patient_age(
-            data_dict, "1A8791E3-A61C-455A-8DEE-763EB90C9B2C"
+            data_dict, "DB22A4D9-7E4D-485C-916A-9CD1386507FB"
         )
-        == 49
+        == 52
     )
 
 
