@@ -40,42 +40,107 @@ def test_parse_data() -> None:
 
 def test_patient_age() -> None:
     """test whether the patient_age function returns the correct age"""
-    data_dict = ehr_analysis.parse_data(
-        "tests/test_patients.txt", "tests/test_labs.txt"
-    )
-    assert (
-        ehr_analysis.patient_age(
-            data_dict, "DB22A4D9-7E4D-485C-916A-9CD1386507FB"
-        )
-        == 52
-    )
+    patients = {
+        "1": {
+            "PatientID": "1",
+            "PatientGender": "Male",
+            "PatientDateOfBirth": "1947-12-28 02:45:40.547",
+        }
+    }
+    labs = {
+        "1": [
+            {
+                "PatientID": "1",
+                "AdmissionID": "1",
+                "LabName": "URINALYSIS: RED BLOOD CELLS",
+                "LabValue": "1.8",
+                "LabUnits": "rbc/hpf",
+                "LabDateTime": "1992-07-01 01:36:17.910",
+            },
+            {
+                "PatientID": "1",
+                "AdmissionID": "1",
+                "LabName": "METABOLIC: GLUCOSE",
+                "LabValue": "103.3",
+                "LabUnits": "mg/dL",
+                "LabDateTime": "1992-06-30 09:35:52.383",
+            },
+        ]
+    }
+    data_dict = (patients, labs)
+    assert ehr_analysis.patient_age(data_dict, "1") == 75
 
 
 def test_patient_age_wrong() -> None:
     """test whether the patient_age function returns the correct age"""
-    data_dict = ehr_analysis.parse_data(
-        "tests/test_patients.txt", "tests/test_labs.txt"
-    )
+    patients = {
+        "2": {
+            "PatientID": "2",
+            "PatientGender": "Male",
+            "PatientDateOfBirth": "1952-01-18 19:51:12.917",
+        }
+    }
+    labs = {
+        "2": [
+            {
+                "PatientID": "2",
+                "AdmissionID": "2",
+                "LabName": "URINALYSIS: RED BLOOD CELLS",
+                "LabValue": "1.8",
+                "LabUnits": "rbc/hpf",
+                "LabDateTime": "1992-07-01 01:36:17.910",
+            },
+            {
+                "PatientID": "2",
+                "AdmissionID": "2",
+                "LabName": "METABOLIC: GLUCOSE",
+                "LabValue": "103.3",
+                "LabUnits": "mg/dL",
+                "LabDateTime": "1992-06-30 09:35:52.383",
+            },
+        ]
+    }
+    data_dict = (patients, labs)
     with pytest.raises(AssertionError) as e:
-        assert (
-            ehr_analysis.patient_age(
-                data_dict, "FB2ABB23-C9D0-4D09-8464-49BF0B982F0F"
-            )
-            == 50
-        )
+        assert ehr_analysis.patient_age(data_dict, "2") == 50
     # match string begin with "assert"
-    assert str(e.value).startswith("assert 75 == 50")
+    assert str(e.value).startswith("assert 71 == 50")
 
 
 def test_patient_is_sick() -> None:
     """test whether the patient_is_sick function returns the correct boolean"""
-    data_dict = ehr_analysis.parse_data(
-        "tests/test_patients.txt", "tests/test_labs.txt"
-    )
+    patients = {
+        "1": {
+            "PatientID": "1",
+            "PatientGender": "Male",
+            "PatientDateOfBirth": "1947-12-28 02:45:40.547",
+        }
+    }
+    labs = {
+        "1": [
+            {
+                "PatientID": "1",
+                "AdmissionID": "1",
+                "LabName": "URINALYSIS: RED BLOOD CELLS",
+                "LabValue": "1.8",
+                "LabUnits": "rbc/hpf",
+                "LabDateTime": "1992-07-01 01:36:17.910",
+            },
+            {
+                "PatientID": "1",
+                "AdmissionID": "1",
+                "LabName": "METABOLIC: GLUCOSE",
+                "LabValue": "103.3",
+                "LabUnits": "mg/dL",
+                "LabDateTime": "1992-06-30 09:35:52.383",
+            },
+        ]
+    }
+    data_dict = (patients, labs)
     assert (
         ehr_analysis.patient_is_sick(
             data_dict,
-            "1A8791E3-A61C-455A-8DEE-763EB90C9B2C",
+            "1",
             "METABOLIC: GLUCOSE",
             ">",
             4.0,
@@ -86,10 +151,10 @@ def test_patient_is_sick() -> None:
     assert (
         ehr_analysis.patient_is_sick(
             data_dict,
-            "1A8791E3-A61C-455A-8DEE-763EB90C9B2C",
-            "CBC: MCH",
+            "1",
+            "URINALYSIS: RED BLOOD CELLS",
             "<",
-            3.0,
+            1.0,
         )
         is False
     )
@@ -98,15 +163,40 @@ def test_patient_is_sick() -> None:
 def test_patient_is_sick_exceptions() -> None:
     """test whether the patient_is_sick function
     raises the correct exceptions when input is invalid"""
-    data_dict = ehr_analysis.parse_data(
-        "tests/test_patients.txt", "tests/test_labs.txt"
-    )
+    patients = {
+        "1": {
+            "PatientID": "1",
+            "PatientGender": "Male",
+            "PatientDateOfBirth": "1947-12-28 02:45:40.547",
+        }
+    }
+    labs = {
+        "1": [
+            {
+                "PatientID": "1",
+                "AdmissionID": "1",
+                "LabName": "URINALYSIS: RED BLOOD CELLS",
+                "LabValue": "1.8",
+                "LabUnits": "rbc/hpf",
+                "LabDateTime": "1992-07-01 01:36:17.910",
+            },
+            {
+                "PatientID": "1",
+                "AdmissionID": "1",
+                "LabName": "METABOLIC: GLUCOSE",
+                "LabValue": "103.3",
+                "LabUnits": "mg/dL",
+                "LabDateTime": "1992-06-30 09:35:52.383",
+            },
+        ]
+    }
+    data_dict = (patients, labs)
     try:
         assert (
             ehr_analysis.patient_is_sick(
                 data_dict,
-                "1A8791E3-A61C-455A-8DEE-763EB90C9B2C",
-                "METABOLIC: ALBUMIN",
+                "1",
+                "URINALYSIS: RED BLOOD CELLS",
                 "!",
                 4.0,
             )

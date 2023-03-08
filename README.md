@@ -47,20 +47,43 @@ The `ehr_analysis` contains three functions.
     
 2. **Return the age in years of a given patient**
     
-    This function takes the outcome(return value) of the function `parse_data` and a patient ID (`string`), returns the age in years of the given patient.
+    This function takes an `tuple[dict[str, dict[str, str]], dict[str, list[dict[str, str]]]]` which contains information of patients and labs, and a patient ID (`string`), returns the age in years of the given patient.
     
    *Example usage:*
     ```{python}
     from ehr_analysis import patient_age
   
     def test_patient_age() -> None:
-    data_dict = ehr_analysis.parse_data("tests/test_patients.txt", "tests/test_labs.txt")
-    assert (
-        ehr_analysis.patient_age(
-            data_dict, "DB22A4D9-7E4D-485C-916A-9CD1386507FB"
-        )
-        == 52
-    )
+    """test whether the patient_age function returns the correct age"""
+    patients = {
+        "1": {
+            "PatientID": "1",
+            "PatientGender": "Male",
+            "PatientDateOfBirth": "1947-12-28 02:45:40.547",
+        }
+    }
+    labs = {
+        "1": [
+            {
+                "PatientID": "1",
+                "AdmissionID": "1",
+                "LabName": "URINALYSIS: RED BLOOD CELLS",
+                "LabValue": "1.8",
+                "LabUnits": "rbc/hpf",
+                "LabDateTime": "1992-07-01 01:36:17.910",
+            },
+            {
+                "PatientID": "1",
+                "AdmissionID": "1",
+                "LabName": "METABOLIC: GLUCOSE",
+                "LabValue": "103.3",
+                "LabUnits": "mg/dL",
+                "LabDateTime": "1992-06-30 09:35:52.383",
+            },
+        ]
+    }
+    data_dict = (patients, labs)
+    assert ehr_analysis.patient_age(data_dict, "1") == 75
     ```
     
 
@@ -68,17 +91,46 @@ The `ehr_analysis` contains three functions.
     
 3. **Indicate a patient's situation based on a test result**
     
-    This function takes the outcome(return value) of the function `parse_data` and a patient ID (`string`), a lab name (`string`), an operator (`string`), and a value of that lab result (`float`), returns a boolean indicating whether the patient has ever had a test with value above (">") or below ("<") the given level. 
+    This function takes an `tuple[dict[str, dict[str, str]], dict[str, list[dict[str, str]]]]` which contains information of patients and labs, a patient ID (`string`), a lab name (`string`), an operator (`string`), and a value of that lab result (`float`), returns a boolean indicating whether the patient has ever had a test with value above (">") or below ("<") the given level. 
     
    *Example usage:*
     ```{python}
     from ehr_analysis import patient_is_sick
   
-    data_dict = ehr_analysis.parse_data("tests/test_patients.txt", "tests/test_labs.txt")
+    def test_patient_is_sick() -> None:
+    """test whether the patient_is_sick function returns the correct boolean"""
+    patients = {
+        "1": {
+            "PatientID": "1",
+            "PatientGender": "Male",
+            "PatientDateOfBirth": "1947-12-28 02:45:40.547",
+        }
+    }
+    labs = {
+        "1": [
+            {
+                "PatientID": "1",
+                "AdmissionID": "1",
+                "LabName": "URINALYSIS: RED BLOOD CELLS",
+                "LabValue": "1.8",
+                "LabUnits": "rbc/hpf",
+                "LabDateTime": "1992-07-01 01:36:17.910",
+            },
+            {
+                "PatientID": "1",
+                "AdmissionID": "1",
+                "LabName": "METABOLIC: GLUCOSE",
+                "LabValue": "103.3",
+                "LabUnits": "mg/dL",
+                "LabDateTime": "1992-06-30 09:35:52.383",
+            },
+        ]
+    }
+    data_dict = (patients, labs)
     assert (
         ehr_analysis.patient_is_sick(
             data_dict,
-            "1A8791E3-A61C-455A-8DEE-763EB90C9B2C",
+            "1",
             "METABOLIC: GLUCOSE",
             ">",
             4.0,
