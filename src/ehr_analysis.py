@@ -148,6 +148,58 @@ def patient_is_sick(
     return False  # O(1)
 
 
+def first_time(
+    records: tuple[dict[str, dict[str, str]], dict[str, list[dict[str, str]]]],
+    patient_id: str,
+) -> int:
+    """Computes the age of a given patient when their earliest lab was recorded
+
+    For every patient, we need to
+    find the lab dictionary that corresponds to the patient ID,
+    which is a O(1) operation.
+    Then, for each lab outcome for that patient,
+    we need to find the earliest lab date,
+    which contains operations of O(1) complexity.
+    Since there are N2/N1 labs outcomes for each patient,
+    a O(N2/N1) operation is performed to figure out
+    the earliest lab date for this patient.
+    Then, we need to find the birth date of the patient,
+    which is a O(1) operation.
+    Finally, we need to calculate the age of the patient
+    when the earliest lab was recorded,
+    which is a O(1) operation.
+
+    For big-O analysis, we drop the constant factor,
+    yeilding O(N2/N1) complexity.
+    """
+    patients = records[0]  # O(1)
+    labs = records[1]  # O(1)
+    # find the earliest lab date for the patient
+    patient_labs = labs[patient_id]  # O(1)
+    for i in range(len(patient_labs)):  # O(N2/N1)
+        if i == 0:  # O(1)
+            earliest_date = patient_labs[i]["LabDateTime"]  # O(1)
+            earliest_time = datetime.datetime.strptime(
+                str(earliest_date), "%Y-%m-%d %H:%M:%S.%f"
+            )  # O(1)
+        else:  # O(1)
+            lab_date = patient_labs[i]["LabDateTime"]  # O(1)
+            lab_time = datetime.datetime.strptime(  # O(1)
+                str(lab_date), "%Y-%m-%d %H:%M:%S.%f"
+            )
+            if lab_time < earliest_time:  # O(1)
+                earliest_time = lab_time  # O(1)
+    # find the patient's date of birth
+    date_of_birth = patients[patient_id]["PatientDateOfBirth"]  # O(1)
+    birth = datetime.datetime.strptime(
+        str(date_of_birth), "%Y-%m-%d %H:%M:%S.%f"
+    )  # O(1)
+    # calculate the age in years
+    age_year = (earliest_time - birth).days / 365  # O(1)
+    age_year_int = int(age_year)  # O(1)
+    return age_year_int  # O(1)
+
+
 if __name__ == "__main__":
     path = "/Users/liuxiaoquan/Documents/Spring2023/Biostats 821/"
     patients_filename = path + "PatientCorePopulatedTable.txt"
@@ -163,3 +215,4 @@ if __name__ == "__main__":
             4.0,
         )
     )
+    print(first_time(records, "1A8791E3-A61C-455A-8DEE-763EB90C9B2C"))
