@@ -4,7 +4,7 @@ The ehr-utils library provides some simple analytical capabilities for EHR data.
 
 ## Modules
 
-* `ehr_analysis` provides three simple analytical capabilities for EHR data, including functions that are able to:
+* `ehr_analysis` provides four simple analytical capabilities for EHR data, including functions that are able to:
 1. **Read and parse the data files**
 2. **Return the age in years of a given patient**
 3. **Indicate a patient's situation based on a test result**
