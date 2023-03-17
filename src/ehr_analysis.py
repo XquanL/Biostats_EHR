@@ -152,7 +152,7 @@ def first_time(
     records: tuple[dict[str, dict[str, str]], dict[str, list[dict[str, str]]]],
     patient_id: str,
 ) -> int:
-    """Computes the age of a given patient when their earliest lab was recorded
+    """Compute the age of a given patient when their earliest lab was recorded.
 
     For every patient, we need to
     find the lab dictionary that corresponds to the patient ID,
