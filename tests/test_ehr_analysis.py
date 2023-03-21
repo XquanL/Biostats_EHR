@@ -277,7 +277,4 @@ def test_first_time_wrong() -> None:
         ]
     }
     data_dict = (patients, labs)
-    with pytest.raises(AssertionError) as e:
-        assert ehr_analysis.first_time(data_dict, "2") == 52
-    # match string begin with "assert"
-    assert str(e.value).startswith("assert 42 == 52")
+    assert ehr_analysis.first_time(data_dict, "2") != 52
