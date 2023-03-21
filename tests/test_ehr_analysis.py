@@ -206,3 +206,75 @@ def test_patient_is_sick_exceptions() -> None:
             "Invalid input value",
             "(ID, lab name, comparison operator, threshold value)",
         )
+
+
+def test_first_time() -> None:
+    """test whether the first_time function returns the correct age"""
+    patients = {
+        "1": {
+            "PatientID": "1",
+            "PatientGender": "Male",
+            "PatientDateOfBirth": "1947-12-28 02:45:40.547",
+        }
+    }
+    labs = {
+        "1": [
+            {
+                "PatientID": "1",
+                "AdmissionID": "1",
+                "LabName": "URINALYSIS: RED BLOOD CELLS",
+                "LabValue": "1.8",
+                "LabUnits": "rbc/hpf",
+                "LabDateTime": "1992-07-01 01:36:17.910",
+            },
+            {
+                "PatientID": "1",
+                "AdmissionID": "2",
+                "LabName": "METABOLIC: GLUCOSE",
+                "LabValue": "103.3",
+                "LabUnits": "mg/dL",
+                "LabDateTime": "1999-06-30 09:35:52.383",
+            },
+        ]
+    }
+    data_dict = (patients, labs)
+    assert (
+        ehr_analysis.first_time(
+            data_dict,
+            "1",
+        )
+        == 44
+    )
+
+
+def test_first_time_wrong() -> None:
+    """test whether the first_time function returns the correct age"""
+    patients = {
+        "2": {
+            "PatientID": "2",
+            "PatientGender": "Male",
+            "PatientDateOfBirth": "1947-12-28 02:45:40.547",
+        }
+    }
+    labs = {
+        "2": [
+            {
+                "PatientID": "2",
+                "AdmissionID": "1",
+                "LabName": "URINALYSIS: RED BLOOD CELLS",
+                "LabValue": "1.8",
+                "LabUnits": "rbc/hpf",
+                "LabDateTime": "1990-08-01 01:36:17.910",
+            },
+            {
+                "PatientID": "2",
+                "AdmissionID": "2",
+                "LabName": "METABOLIC: GLUCOSE",
+                "LabValue": "103.3",
+                "LabUnits": "mg/dL",
+                "LabDateTime": "1999-06-30 09:35:52.383",
+            },
+        ]
+    }
+    data_dict = (patients, labs)
+    assert ehr_analysis.first_time(data_dict, "2") != 52

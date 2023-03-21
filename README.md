@@ -4,10 +4,11 @@ The ehr-utils library provides some simple analytical capabilities for EHR data.
 
 ## Modules
 
-* `ehr_analysis` provides three simple analytical capabilities for EHR data, including functions that are able to:
+* `ehr_analysis` provides four simple analytical capabilities for EHR data, including functions that are able to:
 1. **Read and parse the data files**
 2. **Return the age in years of a given patient**
 3. **Indicate a patient's situation based on a test result**
+4. **Compute the age of a given patient when their earliest lab was recorded**
 
 ## Installation
 Feel free to copy [ehr_analysis.py](https://github.com/biostat821-2023/ehr-utils-XquanL/blob/phase3_new/src/ehr_analysis.py) to your tests/ directory.
@@ -138,7 +139,57 @@ The `ehr_analysis` contains three functions.
         is True
     )
     ```
- 
+
+
+
+4. **Compute the age of a given patient when their earliest lab was recorded**
+
+    This function takes an `tuple[dict[str, dict[str, str]], dict[str, list[dict[str, str]]]]` which contains information of patients and labs and a patient ID (`string`), returns the age in years (`int`) of a given patient when their earliest lab was recorded.
+    
+   *Example usage:*
+    ```{python}
+    from ehr_analysis import patient_is_sick
+  
+    def test_first_time() -> None:
+    """test whether the first_time function returns the correct age"""
+    patients = {
+        "1": {
+            "PatientID": "1",
+            "PatientGender": "Male",
+            "PatientDateOfBirth": "1947-12-28 02:45:40.547",
+        }
+    }
+    labs = {
+        "1": [
+            {
+                "PatientID": "1",
+                "AdmissionID": "1",
+                "LabName": "URINALYSIS: RED BLOOD CELLS",
+                "LabValue": "1.8",
+                "LabUnits": "rbc/hpf",
+                "LabDateTime": "1992-07-01 01:36:17.910",
+            },
+            {
+                "PatientID": "1",
+                "AdmissionID": "2",
+                "LabName": "METABOLIC: GLUCOSE",
+                "LabValue": "103.3",
+                "LabUnits": "mg/dL",
+                "LabDateTime": "1999-06-30 09:35:52.383",
+            },
+        ]
+    }
+    data_dict = (patients, labs)
+    assert (
+        ehr_analysis.first_time(
+            data_dict,
+            "1",
+        )
+        == 44
+    )
+    ```
+
+
  ## Development
  We welcome contributions! Before opening a pull request, please confirm that existing regression tests pass:
    ```{python}
