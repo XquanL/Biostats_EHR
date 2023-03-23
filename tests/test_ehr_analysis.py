@@ -91,11 +91,11 @@ def test_is_sick() -> None:
             },
         ],
     )
-    assert patient1.is_sick("URINALYSIS: RED BLOOD CELLS", ">", 1) == True
+    assert patient1.is_sick("URINALYSIS: RED BLOOD CELLS", ">", 1) is True
 
 
 def test_earliest_admission() -> None:
-    """Test whether the earliest_admission property returns the correct admission"""
+    """Test whether the earliest_admission property returns the correct age"""
     patient1 = Patient(
         id="1",
         gender="male",
