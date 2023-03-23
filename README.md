@@ -14,7 +14,7 @@ The ehr-utils library provides some simple analytical capabilities for EHR data.
 Feel free to copy [ehr_analysis.py](https://github.com/biostat821-2023/ehr-utils-XquanL/blob/phase3_new/src/ehr_analysis.py) to your tests/ directory.
 
 ## Usage
-The `ehr_analysis` contains three functions.
+The `ehr_analysis` contains two classes and one function.
 1. **Read and parse the data files**
   
    This function takes both patient and lab file names, or the path to those files (`string`), produces two lists in a tuple format that contain patients' basic information(`Patient` class) and relevant lab data(`Lab` class), respectively.
