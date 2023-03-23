@@ -1,10 +1,10 @@
-"""Object-oriented EHR Analysis"""
+"""Object-oriented EHR Analysis."""
 
 import datetime
 
 
 class Patient:
-    """Patient class"""
+    """Patient class."""
 
     def __init__(
         self,
@@ -14,7 +14,7 @@ class Patient:
         race: str,
         lab_info: list[dict[str, str]],
     ) -> None:
-        """initiate patient class"""
+        """Initiate patient class."""
         self.id = id
         self.gender = gender
         self.DOB = DOB
@@ -22,7 +22,7 @@ class Patient:
         self.lab_info = lab_info
 
     def __str__(self) -> str:
-        """print patient info"""
+        """Print patient info."""
         return "patient " + self.id + " info"
 
     def is_sick(self, lab_name: str, operator: str, value: float) -> bool:
@@ -74,7 +74,7 @@ class Patient:
 
 
 class Lab:
-    """Lab class"""
+    """Lab class."""
 
     def __init__(
         self,
@@ -84,6 +84,7 @@ class Lab:
         lab_units: str,
         lab_date: str,
     ):
+        """Initiate lab class."""
         self.patient_id = patient_id
         self.lab_name = lab_name
         self.lab_value = lab_value
@@ -91,6 +92,7 @@ class Lab:
         self.lab_date = lab_date
 
     def __str__(self) -> str:
+        """Print lab info."""
         return "lab " + self.lab_name + " info for patient " + self.patient_id
 
 
