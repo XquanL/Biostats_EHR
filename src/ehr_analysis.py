@@ -15,8 +15,8 @@ class Lab:
         lab_value: str,
         lab_units: str,
         lab_date: str,
-    ) -> None:
-
+    ):
+        """Initiate lab class."""
         self.patient_id = patient_id
         self.lab_name = lab_name
         self.lab_value = lab_value
