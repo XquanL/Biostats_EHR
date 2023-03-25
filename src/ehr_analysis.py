@@ -10,14 +10,14 @@ class Patient:
         self,
         id: str,
         gender: str,
-        DOB: str,
+        dob: str,
         race: str,
         lab_info: list[dict[str, str]],
     ) -> None:
         """Initiate patient class."""
         self.id = id
         self.gender = gender
-        self.DOB = DOB
+        self.dob = dob
         self.race = race
         self.lab_info = lab_info
 
@@ -42,7 +42,7 @@ class Patient:
     def age(self) -> int:
         """Calculate the age in years of the given patient."""
         birth = datetime.datetime.strptime(
-            str(self.DOB), "%Y-%m-%d %H:%M:%S.%f"
+            str(self.dob), "%Y-%m-%d %H:%M:%S.%f"
         )
         age_year = (datetime.datetime.today() - birth).days / 365
         age_year_int = int(age_year)
@@ -64,9 +64,8 @@ class Patient:
                 )
                 if lab_time < earliest_time:
                     earliest_time = lab_time
-        date_of_birth = self.DOB
         birth = datetime.datetime.strptime(
-            str(date_of_birth), "%Y-%m-%d %H:%M:%S.%f"
+            str(self.dob), "%Y-%m-%d %H:%M:%S.%f"
         )
         age_year = (earliest_time - birth).days / 365
         age_year_int = int(age_year)
@@ -120,10 +119,10 @@ def parse_data(
             lab_info = lines.strip().split("\t")
             lab = Lab(
                 lab_info[0],
+                lab_info[1],
                 lab_info[2],
                 lab_info[3],
                 lab_info[4],
-                lab_info[5],
             )
             lab_list.append(lab)
     for i in range(len(patient_list)):
@@ -145,7 +144,7 @@ if __name__ == "__main__":
     patient1 = Patient(
         id="1",
         gender="male",
-        DOB="1950-01-01 00:00:00.000000",
+        dob="1950-01-01 00:00:00.000000",
         race="white",
         lab_info=[
             {

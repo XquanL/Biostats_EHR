@@ -6,21 +6,21 @@ import fake_files
 
 # make a fake patient file
 patient_table = [
-    ["id","name","birth_date"],
-    ["1","Alice","1947-01-01"],
-    ["2","Bob","1975-01-01"],
-    ["3","Charlie","1990-01-01"],
+    ["id", "ender", "birth_date", "race"],
+    ["1", "F", "1947-01-01", "white"],
+    ["2", "M", "1975-01-01", "black"],
+    ["3", "F", "1990-01-01", "white"],
 ]
 
 # make a fake lab file
 lab_table = [
-    ["patient_id","lab_name","lab_value","lab_units","lab_date"],
-    ["1","HDL","50","mg/dL","2019-01-01"],
-    ["1","LDL","100","mg/dL","2019-01-01"],
-    ["2","HDL","50","mg/dL","2007-01-01"],
-    ["2","LDL","100","mg/dL","2007-01-01"],
-    ["3","HDL","50","mg/dL","2023-01-01"],
-    ["3","LDL","100","mg/dL","2023-01-01"],
+    ["patient_id", "lab_name", "lab_value", "lab_units", "lab_date"],
+    ["1", "HDL", "50", "mg/dL", "2019-01-01"],
+    ["1", "LDL", "100", "mg/dL", "2019-01-01"],
+    ["2", "HDL", "50", "mg/dL", "2007-01-01"],
+    ["2", "LDL", "100", "mg/dL", "2007-01-01"],
+    ["3", "HDL", "50", "mg/dL", "2023-01-01"],
+    ["3", "LDL", "100", "mg/dL", "2023-01-01"],
 ]
 
 path_patient = fake_files.write_file(patient_table, "tests")
@@ -39,8 +39,9 @@ def test_Patient_class() -> None:
     """Test the Patient class"""
     patient, labs = parse_data(path_patient, path_lab)
     assert patient[0].id == "1"
-    assert patient[0].name == "Alice"
+    assert patient[0].gender == "F"
     assert patient[0].dob == "1947-01-01"
+    assert patient[0].race == "white"
 
 
 def test_Lab_class() -> None:
@@ -58,7 +59,7 @@ def test_patient_age() -> None:
     patient1 = Patient(
         id="1",
         gender="male",
-        DOB="1950-01-01 00:00:00.000000",
+        dob="1950-01-01 00:00:00.000000",
         race="white",
         lab_info=[
             {
@@ -87,7 +88,7 @@ def test_is_sick() -> None:
     patient1 = Patient(
         id="1",
         gender="male",
-        DOB="1950-01-01 00:00:00.000000",
+        dob="1950-01-01 00:00:00.000000",
         race="white",
         lab_info=[
             {
@@ -116,7 +117,7 @@ def test_earliest_admission() -> None:
     patient1 = Patient(
         id="1",
         gender="male",
-        DOB="1950-01-01 00:00:00.000000",
+        dob="1950-01-01 00:00:00.000000",
         race="white",
         lab_info=[
             {
