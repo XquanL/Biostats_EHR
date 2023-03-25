@@ -1,7 +1,0 @@
-patient_id	lab_name	lab_value	lab_units	lab_date
-1	HDL	50	mg/dL	2019-01-01
-1	LDL	100	mg/dL	2019-01-01
-2	HDL	50	mg/dL	2007-01-01
-2	LDL	100	mg/dL	2007-01-01
-3	HDL	50	mg/dL	2023-01-01
-3	LDL	100	mg/dL	2023-01-01
