@@ -2,11 +2,34 @@
 import pytest
 
 from ehr_analysis import Patient, Lab, parse_data
+import fake_files
+
+# make a fake patient file
+patient_table = [
+    ["id","name","birth_date"],
+    ["1","Alice","1947-01-01"],
+    ["2","Bob","1975-01-01"],
+    ["3","Charlie","1990-01-01"],
+]
+
+# make a fake lab file
+lab_table = [
+    ["patient_id","lab_name","lab_value","lab_units","lab_date"],
+    ["1","HDL","50","mg/dL","2019-01-01"],
+    ["1","LDL","100","mg/dL","2019-01-01"],
+    ["2","HDL","50","mg/dL","2007-01-01"],
+    ["2","LDL","100","mg/dL","2007-01-01"],
+    ["3","HDL","50","mg/dL","2023-01-01"],
+    ["3","LDL","100","mg/dL","2023-01-01"],
+]
+
+path_patient = fake_files.write_file(patient_table, "tests")
+path_lab = fake_files.write_file(lab_table, "tests")
 
 
 def test_parse_data_type() -> None:
     """Test the parse_data function returns the correct type."""
-    data_dict = parse_data("tests/test_patients.txt", "tests/test_labs.txt")
+    data_dict = parse_data(path_patient, path_lab)
     assert isinstance(data_dict, tuple)
     assert isinstance(data_dict[0], list)
     assert isinstance(data_dict[1], list)
@@ -14,26 +37,20 @@ def test_parse_data_type() -> None:
 
 def test_Patient_class() -> None:
     """Test the Patient class"""
-    patient, labs = parse_data(
-        "tests/test_patients.txt", "tests/test_labs.txt"
-    )
-    assert patient[0].id == "FB2ABB23-C9D0-4D09-8464-49BF0B982F0F"
-    assert patient[0].gender == "Male"
-    assert patient[0].DOB == "1947-12-28 02:45:40.547"
-    assert patient[0].race == "Unknown"
-    assert patient[0].lab_info == []
+    patient, labs = parse_data(path_patient, path_lab)
+    assert patient[0].id == "1"
+    assert patient[0].name == "Alice"
+    assert patient[0].dob == "1947-01-01"
 
 
 def test_Lab_class() -> None:
     """Test the Lab class"""
-    patient, labs = parse_data(
-        "tests/test_patients.txt", "tests/test_labs.txt"
-    )
-    assert labs[0].patient_id == "1A8791E3-A61C-455A-8DEE-763EB90C9B2C"
-    assert labs[0].lab_name == "URINALYSIS: RED BLOOD CELLS"
-    assert labs[0].lab_value == "1.8"
-    assert labs[0].lab_units == "rbc/hpf"
-    assert labs[0].lab_date == "1992-07-01 01:36:17.910"
+    patient, labs = parse_data(path_patient, path_lab)
+    assert labs[0].patient_id == "1"
+    assert labs[0].lab_name == "HDL"
+    assert labs[0].lab_value == "50"
+    assert labs[0].lab_units == "mg/dL"
+    assert labs[0].lab_date == "2019-01-01"
 
 
 def test_patient_age() -> None:
