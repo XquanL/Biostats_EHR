@@ -2,11 +2,30 @@
 import pytest
 
 from ehr_analysis import Patient, Lab, parse_data
+from fake_files import fake_files
+
+temp_patient = [
+    ["id", "gender", "birth_date", "race"],
+    ["1", "F", "1947-01-01", "white"],
+    ["2", "M", "1975-01-01", "black"],
+    ["3", "F", "1990-01-01", "white"],
+]
+
+temp_lab = [
+    ["patient_id", "lab_name", "lab_value", "lab_units", "lab_date"],
+    ["1", "HDL", "50", "mg/dL", "2019-01-01"],
+    ["1", "LDL", "100", "mg/dL", "2019-01-01"],
+    ["2", "HDL", "50", "mg/dL", "2007-01-01"],
+    ["2", "LDL", "100", "mg/dL", "2007-01-01"],
+    ["3", "HDL", "50", "mg/dL", "2023-01-01"],
+    ["3", "LDL", "100", "mg/dL", "2023-01-01"],
+]
 
 
-def test_parse_data_type() -> None:
+def test_parse_data() -> None:
     """Test the parse_data function returns the correct type."""
-    data_dict = parse_data("tests/temp_patient", "tests/temp_lab")
+    with fake_files(temp_patient, temp_lab) as (patient, lab):
+        data_dict = parse_data(patient, lab)
     assert isinstance(data_dict, tuple)
     assert isinstance(data_dict[0], list)
     assert isinstance(data_dict[1], list)
@@ -14,7 +33,8 @@ def test_parse_data_type() -> None:
 
 def test_Patient_class() -> None:
     """Test the parse_data() Patient has the correct attributes."""
-    patient, labs = parse_data("tests/temp_patient", "tests/temp_lab")
+    with fake_files(temp_patient, temp_lab) as (patient, lab):
+        patient, labs = parse_data(patient, lab)
     assert patient[0].id == "1"
     assert patient[0].gender == "F"
     assert patient[0].dob == "1947-01-01"
@@ -23,7 +43,8 @@ def test_Patient_class() -> None:
 
 def test_Lab_class() -> None:
     """Test the parse_data() Lab has the correct attributes."""
-    patient, labs = parse_data("tests/temp_patient", "tests/temp_lab")
+    with fake_files(temp_patient, temp_lab) as (patient, lab):
+        patient, labs = parse_data(patient, lab)
     assert labs[0].patient_id == "1"
     assert labs[0].lab_name == "HDL"
     assert labs[0].lab_value == "50"

@@ -1,27 +1,18 @@
 """Object-oriented EHR Analysis."""
 
 import datetime
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass
 class Lab:
-    """Lab class."""
+    """Lab class for lab information."""
 
-    def __init__(
-        self,
-        patient_id: str,
-        lab_name: str,
-        lab_value: str,
-        lab_units: str,
-        lab_date: str,
-    ):
-        """Initiate lab class."""
-        self.patient_id = patient_id
-        self.lab_name = lab_name
-        self.lab_value = lab_value
-        self.lab_units = lab_units
-        self.lab_date = lab_date
+    patient_id: str
+    lab_name: str
+    lab_value: str
+    lab_units: str
+    lab_date: str
 
     def __str__(self) -> str:
         """Print lab info."""
@@ -30,22 +21,13 @@ class Lab:
 
 @dataclass
 class Patient:
-    """Patient class."""
+    """Patient class for patient information."""
 
-    def __init__(
-        self,
-        id: str,
-        gender: str = "N/A",
-        dob: str = "N/A",
-        race: str = "N/A",
-        lab_info: list[Lab] = [],
-    ) -> None:
-        """Initiate patient class."""
-        self.id = id
-        self.gender = gender
-        self.dob = dob
-        self.race = race
-        self.lab_info = lab_info
+    id: str
+    gender: str = "N/A"
+    dob: str = "N/A"
+    race: str = "N/A"
+    lab_info: list[Lab] = field(default_factory=list)
 
     def __str__(self) -> str:
         """Print patient info."""
