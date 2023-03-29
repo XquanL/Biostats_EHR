@@ -18,6 +18,7 @@ The `ehr_analysis` contains two classes and one function.
 1. **Read and parse the data files**
   
    This function takes both patient and lab file names, or the path to those files (`string`), produces two lists in a tuple format that contain patients' basic information(`Patient` class) and relevant lab data(`Lab` class), respectively.
+   
    **Note:** *In order to use this function, the input patient data should has columns in the following order: id, gender, DOB, race, and the input lab data should has columns in the following order: id, lab name, lab value, lab unit, lab date.*
   
    *Example usage:*
