@@ -11,7 +11,7 @@ The ehr-utils library provides some simple analytical capabilities for EHR data.
 4. **Compute the age of a given patient when their earliest lab was recorded**
 
 ## Installation
-Feel free to copy [ehr_analysis.py](https://github.com/biostat821-2023/ehr-utils-XquanL/blob/phase3_new/src/ehr_analysis.py) to your tests/ directory.
+Feel free to copy [ehr_analysis.py](https://github.com/biostat821-2023/ehr-utils-XquanL/blob/phase3_new/src/ehr_analysis.py) and [fake_files.py](https://github.com/biostat821-2023/ehr-utils-XquanL/blob/phase5_/tests/fake_files.py)to your tests/ directory.
 
 ## Usage
 The `ehr_analysis` contains two classes and one function.
