@@ -162,10 +162,12 @@ def parse_data(
     cursor.execute("DROP TABLE IF EXISTS Patients")
 
     cursor.execute(
-        "CREATE TABLE IF NOT EXISTS Labs(patient_id VARCHAR, lab_name VARCHAR, lab_value VARCHAR, lab_units VARCHAR, lab_date VARCHAR)"
+        "CREATE TABLE IF NOT EXISTS Labs(patient_id VARCHAR, lab_name VARCHAR,"
+        "lab_value VARCHAR, lab_units VARCHAR, lab_date VARCHAR)"
     )
     cursor.execute(
-        "CREATE TABLE IF NOT EXISTS Patients(id VARCHAR PRIMARY KEY, gender VARCHAR, dob VARCHAR, race VARCHAR, lab_info BLOB)"
+        "CREATE TABLE IF NOT EXISTS Patients(id VARCHAR PRIMARY KEY,"
+        "gender VARCHAR, dob VARCHAR, race VARCHAR, lab_info BLOB)"
     )
     patient_list = []
     lab_list = []
