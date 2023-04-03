@@ -5,7 +5,7 @@ import sqlite3
 from ehr_analysis import Patient, Lab, parse_data
 from fake_files import fake_files
 
-connection = sqlite3.connect("ehr_data.db")
+connection = sqlite3.connect("ehr.db")
 cursor = connection.cursor()
 
 temp_patient = [
