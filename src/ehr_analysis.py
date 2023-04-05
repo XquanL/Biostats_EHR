@@ -93,7 +93,7 @@ class Patient:
     @property
     def labs(self) -> list[Lab]:
         """Return a list of Lab objects for the patient."""
-        # select lab_name, lab_value, lab_units,
+        # select patient_id, lab_name, lab_value, lab_units,
         # lab_date from Labs with patient_id = id
         self.cursor.execute(
             "SELECT patient_id, lab_name, lab_value, lab_units,"
@@ -112,8 +112,7 @@ class Patient:
 
     def is_sick(self, lab_name: str, operator: str, value: float) -> bool:
         """Return a boolean indicating whether the patient is sick."""
-        # select lab_name, lab_value, lab_units,
-        # lab_date from Labs with patient_id = id
+        # get lab info for the patient
         lab_info = self.labs
         for i in range(len(lab_info)):
             if lab_info[i].lab_name == lab_name:
