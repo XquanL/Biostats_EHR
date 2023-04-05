@@ -90,6 +90,22 @@ class Patient:
         )
         return str(self.cursor.fetchone()[0])
 
+    @property
+    def labs(self) -> list[Lab]:
+        """Return a list of Lab objects for the patient."""
+        # select lab_name, lab_value, lab_units,
+        # lab_date from Labs with patient_id = id
+        self.cursor.execute(
+            "SELECT patient_id, lab_name, lab_value, lab_units,"
+            "lab_date FROM Labs WHERE patient_id = ?",
+            (self.id,),
+        )
+        lab_info = self.cursor.fetchall()
+        lab_list = []
+        for i in range(len(lab_info)):
+            lab_list.append(Lab(lab_info[i][0]))
+        return lab_list
+
     def __str__(self) -> str:
         """Print patient info."""
         return "patient " + self.id + " info"
@@ -98,15 +114,10 @@ class Patient:
         """Return a boolean indicating whether the patient is sick."""
         # select lab_name, lab_value, lab_units,
         # lab_date from Labs with patient_id = id
-        self.cursor.execute(
-            "SELECT lab_name, lab_value, lab_units,"
-            "lab_date FROM Labs WHERE patient_id = ?",
-            (self.id,),
-        )
-        lab_info = self.cursor.fetchall()
+        lab_info = self.labs
         for i in range(len(lab_info)):
-            if lab_info[i][0] == lab_name:
-                labvalue = float(lab_info[i][1])
+            if lab_info[i].lab_name == lab_name:
+                labvalue = float(lab_info[i].lab_value)
                 if operator == ">":
                     if labvalue > value:
                         return True
@@ -179,33 +190,28 @@ def parse_data(
 
     with open(lab_filename, "r", encoding="utf-8-sig") as lab_file:
         lab_data = lab_file.readlines()
+        columns = lab_data[0].strip().split("\t")
         for lines in lab_data[1:]:
             lab_info = lines.strip().split("\t")
-            lab_list.append(Lab(lab_info[0]))
+            lab_dict = {columns[i]: lab_info[i] for i in range(len(columns))}
+            lab_list.append(Lab(lab_dict["patient_id"]))
             cursor.execute(
                 "INSERT INTO Labs VALUES (?, ?, ?, ?, ?)",
-                (
-                    lab_info[0],
-                    lab_info[1],
-                    lab_info[2],
-                    lab_info[3],
-                    lab_info[4],
-                ),
+                lab_info,
             )
 
     with open(patient_filename, "r", encoding="utf-8-sig") as patient_file:
         patient_data = patient_file.readlines()
+        columns = patient_data[0].strip().split("\t")
         for lines in patient_data[1:]:
             patient_info = lines.strip().split("\t")
-            patient_list.append(Patient(patient_info[0]))
+            patient_dict = {
+                columns[i]: patient_info[i] for i in range(len(columns))
+            }
+            patient_list.append(Patient(patient_dict["id"]))
             cursor.execute(
                 "INSERT INTO Patients VALUES (?, ?, ?, ?)",
-                (
-                    patient_info[0],
-                    patient_info[1],
-                    patient_info[2],
-                    patient_info[3],
-                ),
+                patient_info,
             )
 
     connection.commit()
